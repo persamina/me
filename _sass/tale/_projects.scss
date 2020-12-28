@@ -1,0 +1,15 @@
+.projects {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+  gap: 20px;
+}
+.project-name {
+  grid-column: 2;
+}
+.project-thumbnail {
+  // max-height: 150px;
+  grid-column: 1;
+}
+.project-details {
+  grid-column: 2;
+}
