@@ -1,10 +1,10 @@
 .projects {
   display: grid;
   grid-template-columns: 1fr 4fr;
-  gap: 20px;
+  gap: 0 15px;
 }
 .project-name {
-  grid-column: 2;
+  grid-column: 1 / -1;
 }
 .project-thumbnail {
   // max-height: 150px;
@@ -12,4 +12,7 @@
 }
 .project-details {
   grid-column: 2;
+}
+.project-line {
+  grid-column: 1 / -1;
 }
