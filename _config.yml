@@ -1,7 +1,7 @@
 # Site settings
 title:          Antti
 description:    "My Site"
-baseurl:        "/me"
+baseurl:        "/"
 url:            "https://persamina.github.io"
 
 # Google Analytics
