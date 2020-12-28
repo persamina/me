@@ -1,7 +1,7 @@
 # Site settings
 title:          Antti
 description:    "My Site"
-baseurl:        "/"
+baseurl:        ""
 url:            "https://persamina.github.io"
 
 # Google Analytics
@@ -10,7 +10,7 @@ google_analytics: UA—XXXXXXXX-X
 # Author
 author:
   name:         Antti Petaisto
-  url:          https://antti.io/me/
+  url:          https://antti.io/
   email:        ahpetaisto@gmail.com
 
 # Build settings
