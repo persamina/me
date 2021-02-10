@@ -28,7 +28,7 @@ To complete this tutorial you'll need the following
 ## Installing the latest Raspberry Pi OS
 The Raspberry Pi Foundation has a Raspberry Pi Imager that can be used to get the latest Raspberry Pi OS and image it on the SD card.  You can dowload the imager [here](https://www.raspberrypi.org/software/).  Select the latest Raspberry Pi OS Lite (that has no desktop application).  We'll connect to it via SSH to do all of our work.  
 
-![Imaging Card](assets/image_card.gif)
+![Imaging Card](../assets/image_card.gif)
 
 ## Enable SSH and connect to local Wi-Fi if available
 
