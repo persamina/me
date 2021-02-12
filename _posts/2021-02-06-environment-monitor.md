@@ -16,7 +16,9 @@ To complete this tutorial you'll need the following
 - [Twilio Developer Kit for Broadband IoT](https://www.twilio.com/docs/iot/wireless/get-started-twilio-developer-kit-broadband-iot) (Instructions on how to purchase are at this link)
 - [Parallax 28090 Liquid Level Sensor](https://www.parallax.com/product/mini-liquid-level-sensor/)
 - [Adafruit ADS1115 or ADS1015 ADC](https://cdn-learn.adafruit.com/downloads/pdf/adafruit-4-channel-adc-breakouts.pdf)
-- Wire to connect sensor to ADC and ADC to 
+- Wire to connect sensor to ADC and ADC to LTE Cat 1 Pi HAT (included in Twilio Developer Kit for Broadband IoT)    
+    - [Seed Studio 110990210](https://www.seeedstudio.com/Grove-4-pin-Male-Jumper-to-Grove-4-pin-Conversion-Cable-5-PCs-per-Pack.html) 
+    - [Jumper Wires](https://www.digikey.ca/en/products/detail/adafruit-industries-llc/153/7241430)
 - [Latest Raspberry Pi OS](https://www.raspberrypi.org/software/)
 - python libraries
     - python venv 
@@ -63,8 +65,16 @@ To confirm that you're connected to Wi-Fi, login to your router and confirm that
 Twilio has a [guide](https://www.twilio.com/docs/iot/wireless/how-to-order-and-register-your-first-sim) for registering your SIM card and selecting a rate plan. We will only be using data to send sms messages.
 
 ## Twilio Developer Kit Setup
-Twilio has a [Quick Start Guide](https://www.twilio.com/docs/iot/wireless/get-started-twilio-developer-kit-broadband-iot) that walks through how to setup and get going with the developer kit that is worth.  Follow the [hardware setup section](https://www.twilio.com/docs/iot/wireless/get-started-twilio-developer-kit-broadband-iot#the-hardware) and this guide will take it from there.
+Twilio has a [Quick Start Guide](https://www.twilio.com/docs/iot/wireless/get-started-twilio-developer-kit-broadband-iot) that walks through how to setup and get going with the developer kit that is worth.  Follow the [hardware setup section](https://www.twilio.com/docs/iot/wireless/get-started-twilio-developer-kit-broadband-iot#the-hardware), don't plug in the screen, and this guide will take it from there.
 
 
-## Connecting
+## Connecting the Liquid Level Sensor to the Raspberry Pi
+If you connected the screen to the I2C port disconnect it now as that is where we will connect our liquid level sensor to. See the diagram below on how to wire it up. Also read [Adafruit's guide](https://cdn-learn.adafruit.com/downloads/pdf/adafruit-4-channel-adc-breakouts.pdf) for further details and warnings when wiring.
 
+![Wiring Diagram](../assets/wiring_diagram.png)
+
+## Power up!
+
+Once the above is complete we can power it up. Once powered up you should see some lights on the Raspberry Pi, the LTE Cat 1 Pi HAT, and the liquid level sensor.
+
+## Library Installation
