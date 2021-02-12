@@ -69,9 +69,11 @@ Twilio has a [Quick Start Guide](https://www.twilio.com/docs/iot/wireless/get-st
 
 
 ## Connecting the Liquid Level Sensor to the Raspberry Pi
-If you connected the screen to the I2C port disconnect it now as that is where we will connect our liquid level sensor to. See the diagram below on how to wire it up. Also read [Adafruit's guide](https://cdn-learn.adafruit.com/downloads/pdf/adafruit-4-channel-adc-breakouts.pdf) for further details and warnings when wiring.
+If you connected the screen to the I2C port disconnect it now as that is where we will connect our liquid level sensor to. See the diagram and image below on how to wire it up. Also read [Adafruit's guide](https://cdn-learn.adafruit.com/downloads/pdf/adafruit-4-channel-adc-breakouts.pdf) for further details and warnings when wiring.
 
 ![Wiring Diagram](../assets/wiring_diagram.png)
+
+![Wiring Image](../assets/wiring_image.jpg)
 
 ## Power up!
 
