@@ -44,7 +44,7 @@ We'll be connecting to our Raspberry Pi via SSH. We can enable SSH by adding a f
 ##  Connect to Local Wi-Fi if Available
 We also will want to connect the Raspberry Pi to Wi-Fi if available to reduce data costs on our Twilio SIM card.  
 
-There are many ways of doing this but the "headless" way is to creaet a file named `wpa_supplicant.conf` in the boot directory updating the `country`, `ssid`, and `psk`. The Raspberry Pi foundation has more detailed instructions [here](https://www.raspberrypi.org/documentation/configuration/wireless/headless.md).
+There are many ways of doing this but the "headless" way is to create a file named `wpa_supplicant.conf` in the boot directory updating the `country`, `ssid`, and `psk`. The Raspberry Pi foundation has more detailed instructions [here](https://www.raspberrypi.org/documentation/configuration/wireless/headless.md).
 
 ```
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
