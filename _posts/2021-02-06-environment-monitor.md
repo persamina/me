@@ -100,143 +100,19 @@ Once activated install the following packages
 
 `pip install grove.py adafruit-circuitpython-ads1x15 luma.core luma.oled paho.mqtt twilio`
 
+Follow Twilio's best practices and add your credentials to a twilio.env file
+```
+echo "export TWILIO_ACCOUNT_SID='ACXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'" > twilio.env
+echo "export TWILIO_AUTH_TOKEN='your_auth_token'" >> twilio.env
+source ./twilio.env
+```
+[source](https://www.twilio.com/docs/usage/secure-credentials)
 
 ## Create Environment Alert Script
 
-``` Python
-import time
-import sys
-import subprocess
-import json
-import urllib
-from grove.i2c import Bus
-from twilio.rest import Client
+This is the python code that we'll run to get the temperature, humidity, and whether or not there the liquid level sensor detects any liquid. The `GroveTemperatureHumiditySensorSHT3x` class is taken from the following [file](https://twilio-deved-content-prod.s3.amazonaws.com/quest/programmable_wireless/broadband/telemetry.py).
 
-import board
-import busio
-import adafruit_ads1x15.ads1115 as ADS
-from adafruit_ads1x15.analog_in import AnalogIn
-
-
-# Global Variables
-UNITS = 'fahrenheit'  # Default temperature unit
-DISPLAY_TYPE = 'temperature' # Show temperature
-DAILY_MESSAGE = False
-
-# Liquid Level Sensor
-
-##############################################
-# Grove Temperature / Humidity Sensor SHT35  #
-##############################################
-class GroveTemperatureHumiditySensorSHT3x(object):
-    def __init__(self, address=0x45, bus=None):
-        self.address = address
-        self.bus = Bus(bus)
-
-    def CRC(self, data):
-        crc = 0xff
-        for s in data:
-            crc ^= s
-            for i in range(8):
-                if crc & 0x80:
-                    crc <<= 1
-                    crc ^= 0x131
-                else:
-                    crc <<= 1
-        return crc
-
-    def read(self):
-        # High repeatability, clock stretching disabled
-        self.bus.write_i2c_block_data(self.address, 0x24, [0x00])
-
-        # Measurement duration < 16 ms
-        time.sleep(0.016)
-
-        # Read 6 bytes back:
-        # Temp MSB, Temp LSB, Temp CRC,
-        # Humididty MSB, Humidity LSB, Humidity CRC
-        data = self.bus.read_i2c_block_data(0x45, 0x00, 6)
-        temperature = data[0] * 256 + data[1]
-        celsius = -45 + (175 * temperature / 65535.0)
-        humidity = 100 * (data[3] * 256 + data[4]) / 65535.0
-        if data[2] != self.CRC(data[:2]):
-            raise RuntimeError("Temperature CRC mismatch")
-        if data[5] != self.CRC(data[3:5]):
-            raise RuntimeError("Humidity CRC mismatch")
-        return celsius, humidity
-
-
-##############################################
-#     Parallax 28090 Liquid Level Sensor     #
-##############################################
-class ParallaxLiquidLevelSensor(object):
-
-    def __init__(self, address=0x48):
-        self.address = address
-        self.i2c = busio.I2C(board.SCL, board.SDA)
-        self.ads = ADS.ADS1115(self.i2c, address=0x48)
-        self.chan = AnalogIn(self.ads, ADS.P0)
-
-    def read(self):
-        print('liquid value: ' + str(self.chan.value) + 'liquid voltage: ' + str(self.chan.voltage))
-        return self.chan.value
-    
-    def water_detected(self):
-        return self.chan.value > 3000
-
-
-def read_sensors_and_display():
-    try:
-        sensor = GroveTemperatureHumiditySensorSHT3x()
-        liquid_sensor = ParallaxLiquidLevelSensor()
-
-        celsius_temperature, humidity = sensor.read()
-        fahrenheit_temperature = (celsius_temperature * 1.8) + 32
-        celsius_temperature = float("{0:.2f}".format(celsius_temperature))
-        fahrenheit_temperature = float("{0:.2f}"
-                                        .format(fahrenheit_temperature))
-        humidity = float("{0:.2f}".format(humidity))
-
-        # Format a temperature reading message to the cloud
-        if UNITS == "fahrenheit":
-            long_temp = ('Temperature: {:.2f} F'
-                            .format(fahrenheit_temperature))
-        else:
-            long_temp = ('Temperature: {:.2f} C'
-                            .format(celsius_temperature))
-
-        # Format humidity
-        long_humid = ('Relative Humidity: {:.2f}%'
-                        .format(humidity))
-
-        print(long_temp)
-        print(long_humid)
-        # liquid_sensor_msg = 'liquid sensor value: ' + str(chan.value) + '\nliquid sensor voltage: ' + str(chan.voltage)
-        # print(liquid_sensor_msg)
-
-        if (liquid_sensor.water_detected() or DAILY_MESSAGE):
-            text_details(long_temp + '\n ' + long_humid + '\nWater found: ' + str(liquid_sensor.water_detected()) )
-    except KeyboardInterrupt:
-        print ("IoTHubClient sample stopped")
-
-def text_details(details):
-    account_sid = os.environ['twilio_account_sid']
-    auth_token = os.environ['twilio_auth_token']
-    client = Client(account_sid, auth_token) 
-    message = client.messages.create( 
-        from_='+17198385172',  
-        body=details,      
-        to='+13062276751' 
-    ) 
-
-if __name__ == '__main__':
-    DAILY_MESSAGE = len(sys.argv) > 1 and sys.argv[1] == '1'
-    print(DAILY_MESSAGE)
-    read_sensors_and_display()
-
-
-
-```
+[Github Gist](https://gist.github.com/persamina/043f5e8f25b44bbddcfddcbd3ee764ab) of code
 
 ## Create bash file for crontab to use
 
