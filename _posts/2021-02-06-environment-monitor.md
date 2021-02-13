@@ -220,8 +220,8 @@ def read_sensors_and_display():
         print ("IoTHubClient sample stopped")
 
 def text_details(details):
-    account_sid = 'ACcaa9583ac20e99e1946de9579af43b39' 
-    auth_token = '1582f36a05a93357acec0c608ba2612b' 
+    account_sid = os.environ['twilio_account_sid']
+    auth_token = os.environ['twilio_auth_token']
     client = Client(account_sid, auth_token) 
     message = client.messages.create( 
         from_='+17198385172',  
