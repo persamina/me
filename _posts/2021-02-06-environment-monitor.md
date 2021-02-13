@@ -56,8 +56,6 @@ network={
 ```
 [source](https://www.raspberrypi.org/documentation/configuration/wireless/headless.md)
 
-To confirm that you're connected to Wi-Fi, login to your router and confirm that a device named `raspberrypi` or equivalent. Note the IP Address and while you're at it setup a permanent IP Address to make connecting to your Raspberry Pi easier.
-
 ## Setting up SIM Card
 Twilio has a [guide](https://www.twilio.com/docs/iot/wireless/how-to-order-and-register-your-first-sim) for registering your SIM card and selecting a rate plan. We will only be using data to send sms messages.
 
@@ -77,6 +75,22 @@ If you connected the screen to the I2C port disconnect it now as that is where w
 
 ## Power up!
 Once the above is complete we can power it up. Once powered up you should see some lights on the Raspberry Pi, the LTE Cat 1 Pi HAT, and the liquid level sensor.
+
+## SSH into Raspberry PI
+
+To confirm that you're connected to Wi-Fi, login to your router and confirm that a device named `raspberrypi` or equivalent. Note the IP Address and while you're at it setup a permanent IP Address to make connecting to your Raspberry Pi easier.
+
+If the the device is listed in your router, you should now be able to SSH into the Raspberry Pi.
+
+`ssh pi@<YOUR IP ADDRESS>`
+
+![pi login](../assets/pi_login.gif)
+
+## Set Timezone
+
+We'll set the timezone of the Raspberry Pi. This will make configuring our cron jobs easier
+
+`sudo raspi-config`
 
 ## Installation of Libraries
 For development we'll be installing the following libraries but first will run `sudo apt update` to update
@@ -109,6 +123,8 @@ source ./twilio.env
 ```
 [source](https://www.twilio.com/docs/usage/secure-credentials)
 
+If you are going to be pushing these files to source control makes sure you don't upload the `twilio.env` file by adding it to your `.gitignore` file.
+
 ## Create Environment Alert Script
 
 This is the python code that we'll run to get the temperature, humidity, and whether or not there the liquid level sensor detects any liquid. The `GroveTemperatureHumiditySensorSHT3x` class is taken from the following [file](https://twilio-deved-content-prod.s3.amazonaws.com/quest/programmable_wireless/broadband/telemetry.py) that is part of the [Quick Start Guide](https://www.twilio.com/docs/iot/wireless/get-started-twilio-developer-kit-broadband-iot) for the developer kit.
@@ -131,7 +147,11 @@ You should see something similar output to terminal as well as receive a text me
 ![tempsend](../assets/temp_send.gif)
 
 
-## Create bash file for crontab to use
+## Create bash file for cron to use
+
+Now that we have a working python script we'll want to have our Raspberry Pi periodically run it to check for water and if it finds water to notify us via SMS. We'll do this using crontab but since we installed all of our packages in a virtual environment and stored our secret variables in the `twilio.env` file we need to activate them before we run our python script.
+
+We'll do that via the following `environment_alert.bash` bash script that we'll create in our home directory .
 
 ```
 #!/bin/bash
@@ -140,11 +160,25 @@ source /home/pi/environment_alert/twilio.env
 python /home/pi/environment_alert/environment_alert.py $1
 ```
 
-## Setup crontab
+Test it by running it, you should see the temperature and humidity on the terminal.
 
-crontab -e
+`bash /home/pi/environment_alert.bash`
+
+## Setup cron
+
+Now that we have a bash script, lets setup cron to run the script periodically. As configured below, and with the `environment_alert.py` file provided the script will be run every other minute and once at 5:00PM when it will send a text message with or without water detected. 
+
+`crontab -e`
 
 ```
 0 17 * * * bash /home/pi/environment_alert.bash 1
 1-59/2 * * * * bash /home/pi/environment_alert.bash
 ```
+
+![crontab](../assets/crontab.gif)
+
+## Conclusion
+
+We now have a environmental alerting system that will alert us if water is detected and at 5:00PM daily will send us environmental conditions.  This can be used at remote locations where Wi-Fi isn't readily available but where the cellular network is.
+
+In the next tutorial we'll enhance this to also allow us to query the Raspberry Pi for the environmental conditions as well as allow us to take a send an MMS.
