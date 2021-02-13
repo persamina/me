@@ -116,7 +116,7 @@ This is the python code that we'll run to get the temperature, humidity, and whe
 
 ## Create bash file for crontab to use
 
-``` Python
+```
 #!/bin/bash
 source /home/pi/environment_monitor/venv/bin/activate
 python /home/pi/environment_monitor/environment_monitor.py $1
