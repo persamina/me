@@ -79,4 +79,27 @@ If you connected the screen to the I2C port disconnect it now as that is where w
 
 Once the above is complete we can power it up. Once powered up you should see some lights on the Raspberry Pi, the LTE Cat 1 Pi HAT, and the liquid level sensor.
 
-## Library Installation
+## Installation of Libraries
+
+For development we'll be installing the following libraries but first will run `sudo apt update` to update
+
+- git (`sudo apt install git`)
+- python 3 venv (`sudo apt-get install python3-venv`)
+- python 3 pip (`sudo apt install python3-pip`)
+- groove.py ([Install Instructions](https://github.com/Seeed-Studio/grove.py#installation))
+
+Let's now make a directory called `environment_alert/` for our project and make it the working directory, create a virtual environment and activate it 
+
+```
+cd environment_alert/
+python3 -m venv venv
+source venv/bin/activate
+```
+
+Once activated install the following packages 
+
+`pip install grove.py adafruit-circuitpython-ads1x15 luma.core luma.oled paho.mqtt twilio`
+
+
+
+
